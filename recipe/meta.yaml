@@ -42,17 +42,17 @@ requirements:
     - {{ compiler('c') }}        # [unix]
     - {{ compiler('m2w64_c') }}  # [win]
   host:
-    - xorg-libx11 1.6.*
-    - xorg-libpthread-stubs
-    - xorg-libxext
+    - pthread-stubs
     - xorg-xextproto
     - xorg-printproto
-    - xorg-libxau
     - xorg-util-macros  # [win]
+    - xorg-libx11 1.6.*
+    - xorg-libxau
+    - xorg-libxext
   run:
     - xorg-libx11 1.6.*
-    - xorg-libxext
     - xorg-libxau
+    - xorg-libxext
 
 test:
   commands:
