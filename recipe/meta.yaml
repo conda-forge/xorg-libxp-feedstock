@@ -15,7 +15,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 1
+  number: 2
   detect_binary_files_with_prefix: true
 
   # Windows build failing. See https://ci.appveyor.com/project/epruesse/staged-recipes/build/1.0.64/job/p3bt0xipb8cms0hm#L1194
@@ -61,8 +61,6 @@ test:
     - test -f $PREFIX/lib/lib{{ lib_ident }}.dylib  # [osx]
     - test -f $PREFIX/lib/lib{{ lib_ident }}.so  # [linux]
     - if not exist %PREFIX%/Library/lib/lib{{ lib_ident }}.dll.a exit /b 1  # [win]
-    - if not exist %PREFIX%/Library/lib/lib{{ lib_ident }}.a exit /b 1  # [win]
-    - if not exist %PREFIX%/Library/lib/lib{{ lib_ident }}.la exit /b 1  # [win]
     - if not exist %PREFIX%/Library/bin/msys-{{ lib_ident }}-*.dll exit /b 1  # [win]
     {% endfor %}
     - conda inspect linkages -p $PREFIX $PKG_NAME  # [not win]
