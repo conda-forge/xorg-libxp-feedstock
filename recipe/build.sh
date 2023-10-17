@@ -43,6 +43,8 @@ if [ -n "$CYGWIN_PREFIX" ] ; then
     # msys2 stub libraries for ws2_32.
     platlibs=$(cd $(dirname $(gcc --print-prog-name=ld))/../lib && pwd -W)
     export LDFLAGS="$LDFLAGS -L$platlibs"
+else
+    cp -f $BUILD_PREFIX/share/gnuconfig/config.* .
 fi
 
 export PKG_CONFIG_LIBDIR=$uprefix/lib/pkgconfig:$uprefix/share/pkgconfig
