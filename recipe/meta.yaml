@@ -48,11 +48,11 @@ requirements:
     - xorg-xextproto
     - xorg-printproto
     - xorg-util-macros  # [win]
-    - xorg-libx11 1.6.*
+    - xorg-libx11 1.8.*
     - xorg-libxau
     - xorg-libxext
   run:
-    - xorg-libx11 1.6.*
+    - xorg-libx11 1.8.*
     - xorg-libxau
     - xorg-libxext
 
