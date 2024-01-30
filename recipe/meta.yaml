@@ -15,7 +15,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 1002
+  number: 1003
   detect_binary_files_with_prefix: true
 
   # Windows build failing. See https://ci.appveyor.com/project/epruesse/staged-recipes/build/1.0.64/job/p3bt0xipb8cms0hm#L1194
