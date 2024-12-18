@@ -1,58 +1,47 @@
 {% set xorg_name = "libXp" %}
 {% set xorg_category = "lib" %}
 {% set name = "xorg-" ~ xorg_name %}
-{% set version = "1.0.3" %}
-{% set sha256 = "7f360c9905849c3587d48efc0f0ecbc852c19f61a52b18530d6b005cb9148c57" %}
-{% set am_version = "1.15" %} # keep synchronized with build.sh
+{% set version = "1.0.4" %}
+{% set am_version = "1.16" %} # keep synchronized with build.sh
+
+# Note that this library is deprecated by X.org and will may not ever see
+# another release.
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.bz2
-  url: https://www.x.org/releases/individual/{{ xorg_category }}/{{ xorg_name }}-{{ version }}.tar.bz2
-  sha256: {{ sha256 }}
+  url: https://www.x.org/releases/individual/{{ xorg_category }}/{{ xorg_name }}-{{ version }}.tar.xz
+  sha256: 1f19e3b8e82a34a8fd9889a7d9af0abe8588cb03fb57c37c569634cf3b9df1a4
 
 build:
-  number: 1003
-  detect_binary_files_with_prefix: true
-
-  # Windows build failing. See https://ci.appveyor.com/project/epruesse/staged-recipes/build/1.0.64/job/p3bt0xipb8cms0hm#L1194
-  # Error:
-  # In file included from XpJob.c:44:0:
-  # $PREFIX/include/X11/extensions/Printstr.h:116:18: error: conflicting types for 'CARD32'
-  # #define PCONTEXT CARD32
-  #                ^
-  # In file included from $PREFIX/include/X11/Xproto.h:72:0,
-  #               from $PREFIX/include/X11/extensions/Printstr.h:64,
-  #               from XpJob.c:44:
-  # $PREFIX/include/X11/Xmd.h:111:23: note: previous declaration of 'CARD32' was here
-  # typedef unsigned long CARD32;
+  number: 0
   skip: True  # [win]
+  run_exports:
+    - {{ pin_subpackage(name|lower) }}
 
 requirements:
   build:
-    - m2-autoconf  # [win]
+    - m2-autoconf                  # [win]
     - m2-automake{{ am_version }}  # [win]
-    - m2-libtool  # [win]
-    - m2w64-pkg-config  # [win]
-    - gnuconfig  # [unix]
-    - make
-    - pkg-config  # [not win]
-    - posix  # [win]
-    - {{ compiler('c') }}        # [unix]
-    - {{ compiler('m2w64_c') }}  # [win]
+    - m2-libtool                   # [win]
+    - pkg-config                   # [unix]
+    - m2-pkg-config                # [win]
+    - gnuconfig                    # [unix]
+    - m2-base                      # [win]
+    - make                         # [unix]
+    - m2-make                      # [win]
+    - {{ compiler("c") }}          # [unix]
+    - {{ stdlib("c") }}            # [unix]
+    - {{ compiler("m2w64_c") }}    # [win]
+    - {{ stdlib("m2w64_c") }}      # [win]
   host:
     - pthread-stubs
-    - xorg-xextproto
-    - xorg-printproto
-    - xorg-util-macros  # [win]
-    - xorg-libx11 1.8.*
-    - xorg-libxau
-    - xorg-libxext
-  run:
-    - xorg-libx11 1.8.*
+    - xorg-xorgproto
+    - xorg-printproto  # this is deprecated and *not* rolled up into xorgproto
+    - xorg-util-macros
+    - xorg-libx11
     - xorg-libxau
     - xorg-libxext
 
@@ -65,8 +54,6 @@ test:
     - if not exist %PREFIX%/Library/lib/lib{{ lib_ident }}.dll.a exit /b 1  # [win]
     - if not exist %PREFIX%/Library/bin/msys-{{ lib_ident }}-*.dll exit /b 1  # [win]
     {% endfor %}
-    - conda inspect linkages -p $PREFIX $PKG_NAME  # [not win]
-    - conda inspect objects -p $PREFIX $PKG_NAME  # [osx]
 
 about:
   home: https://www.x.org/
